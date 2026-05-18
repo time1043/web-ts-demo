@@ -1,7 +1,5 @@
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 
-// `type`: customized types
-// `|`: can be combined with union types
 type Gender = "" | "male" | "female";
 
 export default function App() {
@@ -9,6 +7,20 @@ export default function App() {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [gender, setGender] = useState<Gender>("");
+
+  // function handleGenderChange(event: SyntheticEvent) {
+  //   const { value } = event.target as HTMLSelectElement;
+  //   if (value !== "male" && value !== "female" && value !== "")
+  //     return alert("Invalid gender");
+  //   setGender(value);
+  // }
+
+  function handleGenderChange(event: ChangeEvent<HTMLSelectElement>) {
+    const { value } = event.target;
+    if (value !== "male" && value !== "female" && value !== "")
+      return alert("Invalid gender");
+    setGender(value);
+  }
 
   return (
     <main>
@@ -25,12 +37,13 @@ export default function App() {
         />
 
         {/* It need to assert the type, then ts no longer complains. But errors manually are no longer checked */}
+        {/* So it need the validation logic */}
         <label htmlFor="gender">Gender</label>
         <select
           name="gender"
           id="gender"
           value={gender}
-          onChange={(e) => setGender(e.target.value as Gender)}
+          onChange={handleGenderChange}
         >
           <option value="" disabled>
             Choose your gender
