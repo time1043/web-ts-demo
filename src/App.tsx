@@ -1,4 +1,5 @@
 import { useState, type ChangeEvent } from "react";
+import Input from "./components/Input";
 
 type Gender = "" | "male" | "female";
 
@@ -7,13 +8,6 @@ export default function App() {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [gender, setGender] = useState<Gender>("");
-
-  // function handleGenderChange(event: SyntheticEvent) {
-  //   const { value } = event.target as HTMLSelectElement;
-  //   if (value !== "male" && value !== "female" && value !== "")
-  //     return alert("Invalid gender");
-  //   setGender(value);
-  // }
 
   function handleGenderChange(event: ChangeEvent<HTMLSelectElement>) {
     const { value } = event.target;
@@ -27,14 +21,15 @@ export default function App() {
       <h1>Register</h1>
 
       <form>
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          id="email"
+        <Input
           name="email"
+          type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-        />
+          // onValueChange={setEmail}
+        >
+          Email
+        </Input>
 
         {/* It need to assert the type, then ts no longer complains. But errors manually are no longer checked */}
         {/* So it need the validation logic */}
@@ -53,23 +48,23 @@ export default function App() {
           <option value="other">Other</option>
         </select>
 
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
+        <Input
           name="password"
+          type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-        />
+        >
+          Password
+        </Input>
 
-        <label htmlFor="confirmPassword">Confirm Password</label>
-        <input
-          type="password"
-          id="confirmPassword"
+        <Input
           name="confirmPassword"
+          type="password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
-        />
+        >
+          Confirm Password
+        </Input>
 
         <button type="submit">Submit</button>
       </form>
