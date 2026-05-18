@@ -1,11 +1,14 @@
 import { useState } from "react";
 
+// `type`: customized types
+// `|`: can be combined with union types
+type Gender = "" | "male" | "female";
+
 export default function App() {
-  // const [email, setEmail] = useState(""); // infer the type from the initial value
-  const [email, setEmail] = useState<string>(""); // generic type annotation
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const [gender, setGender] = useState<string>("male");
+  const [gender, setGender] = useState<Gender>("");
 
   return (
     <main>
@@ -21,12 +24,13 @@ export default function App() {
           onChange={(e) => setEmail(e.target.value)}
         />
 
+        {/* It need to assert the type, then ts no longer complains. But errors manually are no longer checked */}
         <label htmlFor="gender">Gender</label>
         <select
           name="gender"
           id="gender"
           value={gender}
-          onChange={(e) => setGender(e.target.value)}
+          onChange={(e) => setGender(e.target.value as Gender)}
         >
           <option value="" disabled>
             Choose your gender
