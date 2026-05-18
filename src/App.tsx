@@ -1,5 +1,6 @@
 import { useState, type ChangeEvent } from "react";
 import Input from "./components/Input";
+import { genderSchema } from "./schemas/gender";
 
 type Gender = "" | "male" | "female";
 
@@ -11,9 +12,11 @@ export default function App() {
 
   function handleGenderChange(event: ChangeEvent<HTMLSelectElement>) {
     const { value } = event.target;
-    if (value !== "male" && value !== "female" && value !== "")
-      return alert("Invalid gender");
-    setGender(value);
+
+    // Type transformation with type validation
+    const { success, data, error } = genderSchema.safeDecode(value as Gender);
+    if (!success) return alert(error);
+    setGender(data);
   }
 
   return (
