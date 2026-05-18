@@ -1,6 +1,8 @@
-import { useState, type ChangeEvent } from "react";
+import { useState, type SubmitEvent } from "react";
 import Input from "./components/Input";
+import type { SelectOptions } from "./components/Select";
 import { genderSchema } from "./schemas/gender";
+import Select from "./components/Select";
 
 type Gender = "" | "male" | "female";
 
@@ -8,22 +10,39 @@ export default function App() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const [gender, setGender] = useState<Gender>("");
+  const [gender, setGender] = useState<Gender>("male");
 
-  function handleGenderChange(event: ChangeEvent<HTMLSelectElement>) {
-    const { value } = event.target;
+  const genderOptions: SelectOptions<Gender> = [
+    { label: "Male", value: "male" },
+    { label: "Female", value: "female" },
+  ];
 
+  // function handleGenderChange(event: ChangeEvent<HTMLSelectElement>) {
+  //   const { value } = event.target;
+
+  //   // Type transformation with type validation
+  //   const { success, data, error } = GenderSchema.safeDecode(value as Gender);
+  //   if (!success) return alert(error);
+  //   setGender(data);
+  // }
+
+  function handleGenderValueChange(value: Gender) {
     // Type transformation with type validation
-    const { success, data, error } = genderSchema.safeDecode(value as Gender);
+    const { success, data, error } = genderSchema.safeDecode(value);
     if (!success) return alert(error);
     setGender(data);
+  }
+
+  function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
+    event.preventDefault();
+    console.log({ email, gender, password, confirmPassword });
   }
 
   return (
     <main>
       <h1>Register</h1>
 
-      <form>
+      <form onSubmit={handleSubmit}>
         <Input
           name="email"
           type="email"
@@ -34,22 +53,15 @@ export default function App() {
           Email
         </Input>
 
-        {/* It need to assert the type, then ts no longer complains. But errors manually are no longer checked */}
-        {/* So it need the validation logic */}
-        <label htmlFor="gender">Gender</label>
-        <select
+        <Select
           name="gender"
-          id="gender"
+          options={genderOptions}
           value={gender}
-          onChange={handleGenderChange}
+          // onChange={handleGenderChange}
+          onValueChange={handleGenderValueChange}
         >
-          <option value="" disabled>
-            Choose your gender
-          </option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-          <option value="other">Other</option>
-        </select>
+          Gender
+        </Select>
 
         <Input
           name="password"
